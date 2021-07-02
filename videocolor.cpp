@@ -1,17 +1,10 @@
-#include "GRASTAC.h"
+#include "GRASTAColor.h"
 
 struct BGR {
 	float blue;
 	float green;
 	float red;
 };
-
-void pr(float* aea, int ne) {
-	for (int i = 0; i < ne; ++i) {
-		cout << aea[i] << '\n';
-	}
-	cout << '\n';
-}
 
 int main(int argc, char* argv[]) {
 
@@ -24,7 +17,7 @@ int main(int argc, char* argv[]) {
 	int d = 9;
 
 	// Preparing parameters for Stat init
-	float eta = 0.000001;
+	float eta = 0.000000001;
 	float rho = 1;
 	int maxiterns = 20;
 	int maxiters = 40;
@@ -91,9 +84,9 @@ int main(int argc, char* argv[]) {
 		// Split frame into channels and link to G
 		vector<Mat> bgr(3);
 		split(*frame, bgr);
-		G.vB = bgr[2].ptr<float>(0);
+		G.vB = bgr[0].ptr<float>(0);
 		G.vG = bgr[1].ptr<float>(0);
-		G.vR = bgr[0].ptr<float>(0);
+		G.vR = bgr[2].ptr<float>(0);
 
 		// Perform GRASTA step
 		G.GRASTA_step();
@@ -135,6 +128,9 @@ int main(int argc, char* argv[]) {
 
 		// Normalize to 0-255
 		normalize(*fg, *fg, 255, 0, CV_MINMAX);
+
+		// Update turbo
+		G.uptL0(fg->ptr<float>(0));
 
 		// Convert back to unchar
 		bg->convertTo(*bg, CV_8UC3);
@@ -186,6 +182,12 @@ int main(int argc, char* argv[]) {
 				G.d = 1;
 			}
 			printf("d down to %d\n", G.d);
+			break;
+		case 'r': // Reset bg
+			G.turbo = 0;
+			break;
+		case 'f': // Reset bg
+			G.turbo = 100;
 			break;
 		default:
 			;
