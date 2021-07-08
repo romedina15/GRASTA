@@ -515,6 +515,9 @@ struct GRASTA { // Might need to reorder to optimize memory
 
 		// Update turbo
 		uptL0(fg);
+
+		// Soft Thesholding
+		//shrink(fg, fg, 0.1, n);
 	}
 
 	// Update turbo with L0 loss

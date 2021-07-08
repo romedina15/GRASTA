@@ -130,6 +130,9 @@ int main(int argc, char* argv[]) {
 		case 'r': // Reset bg
 			G.turbo = 0;
 			break;
+		case 'f': // Fix bg
+			G.turbo = 50;
+			break;
 		default:
 			;
 		}
